@@ -1,9 +1,22 @@
+# Build & install directories
+bin
+lib
+dep
+deps
+cov
+coverage
+bld
+build
+inc
+include
+
 # Prerequisites
 *.d
+*.gch
 
 # Compiled Object files
-*.slo
 *.lo
+*.ko
 *.o
 *.obj
 
@@ -16,13 +29,7 @@
 *.dylib
 *.dll
 
-# Fortran module files
-*.mod
-*.smod
-
 # Compiled Static libraries
-*.lai
-*.la
 *.a
 *.lib
 
