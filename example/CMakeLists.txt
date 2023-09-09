@@ -13,6 +13,12 @@ set(SOURCES ${SOURCES} ${INCLUDES})
 # Create our output executable.
 add_executable(${BINARY} ${SOURCES})
 
+# Set the example application as dependant on the library.
+add_dependencies(${BINARY} ${CMAKE_PROJECT_NAME})
+
+# Link the example application aginst the library.
+target_link_libraries(${BINARY} ${CMAKE_PROJECT_NAME})
+
 # Install the output executable to the 'bin' subdirectory
 # of the install path.
 install(TARGETS ${BINARY}

@@ -10,7 +10,7 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
 # Note the path to the Google Test directory.
 set(GTEST     "googletest")
-set(GTEST_DIR "${CMAKE_BINARY_DIR}/dep/${GTEST}")
+set(GTEST_DIR "${CMAKE_BINARY_DIR}/${PROJ_DEP_PATH}/${GTEST}")
 
 # Download & compile the Google Test dependency on build.
 include(ExternalProject)
@@ -36,7 +36,6 @@ set(SOURCES ${TEST_SOURCES})
 
 # Create our test executable.
 add_executable(${BINARY} ${SOURCES})
-#add_dependencies(${BINARY} gtest)
 add_test(NAME ${BINARY} COMMAND ${BINARY})
 
 # Allow CMake to scan for tests using the library.
