@@ -71,7 +71,6 @@ add_custom_command(TARGET coverage
                  -d ${OBJ_DIR} -t "${BINARY} Test Coverage"
                  --path ${CMAKE_SOURCE_DIR}/${PROJ_SRC_PATH}
                  --no-external -o ./coverage.info
-    COMMAND lcov --list ./coverage.info
     WORKING_DIRECTORY ${COV_DIR}
 )
 add_dependencies(coverage ${BINARY})
