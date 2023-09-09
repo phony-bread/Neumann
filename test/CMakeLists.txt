@@ -77,4 +77,6 @@ add_custom_command(TARGET coverage
 add_dependencies(coverage ${BINARY})
 
 # Install coverage files to the 'coverage/' output directory.
-install(DIRECTORY ${COV_DIR}/ DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/${PROJ_COV_PATH})
+install(DIRECTORY ${COV_DIR}/
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/${PROJ_COV_PATH}
+    OPTIONAL)

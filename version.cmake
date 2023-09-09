@@ -19,7 +19,7 @@ if(NOT DEFINED NEUMANN_VERSION)
     set(NEUMANN_SEMVER 0.0.0)
     set(NEUMANN_VERSION v${NEUMANN_SEMVER}-dev)
     message(WARNING "Failed to get version tag from git, "
-        "using default \"${NEUMANN_VERSION}\".")
+                    "using default \"${NEUMANN_VERSION}\".")
 endif()
 
 # Generate our version configuration source file.
