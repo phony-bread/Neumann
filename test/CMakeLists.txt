@@ -56,52 +56,25 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake
 # Setup directories for coverage.
 set(OBJ_DIR ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${BINARY}.dir)
 set(COV_DIR ${CMAKE_BINARY_DIR}/${PROJ_COV_PATH})
-file(MAKE_DIRECTORY ${COV_DIR})
 
-# Create a custom target to gather compile-tim
-# code-coverage information.
-add_custom_target(gcov
-    COMMAND mkdir -p ${COV_DIR}
-)
-add_custom_command(TARGET gcov
+# Create a custom target to generate a code-coverage report from
+# compile-/run-time information coverage inforation.
+add_custom_target(coverage
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${COV_DIR})
+add_custom_command(TARGET coverage
     COMMAND gcov -b ${CMAKE_SOURCE_DIR}/${PROJ_SRC_PATH}/*.cpp
                  -s ${CMAKE_SOURCE_DIR}/${PROJ_SRC_PATH} -k -q
                  -o ${OBJ_DIR}/${PROJ_SRC_PATH} -m -f -j
-    WORKING_DIRECTORY ${COV_DIR}
-)
-add_dependencies(gcov ${BINARY})
-
-# Create a custom target to run the text executable to
-# generate a test report & run-time coverage information.
-add_custom_target(test)
-add_custom_command(TARGET test
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${BINARY} --gtest_output="xml:report.xml"
-    WORKING_DIRECTORY ${COV_DIR}
-)
-add_dependencies(test ${BINARY})
-
-# Create a custom target to gather run-time code-coverage information.
-add_custom_target(lcov)
-add_custom_command(TARGET lcov
+    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${BINARY}
+                  --gtest_brief=1 --gtest_print_time=0
     COMMAND lcov -c -b ${CMAKE_SOURCE_DIR}/${PROJ_SRC_PATH}
                  -d ${OBJ_DIR} -t "${BINARY} Test Coverage"
                  --path ${CMAKE_SOURCE_DIR}/${PROJ_SRC_PATH}
                  --no-external -o ./coverage.info
-    WORKING_DIRECTORY ${COV_DIR}
-)
-add_dependencies(lcov test gcov)
-
-# Create a custom target to generate a code-coverage report from
-# compile-/run-time information coverage inforation.
-# Also print a code-coverage summary for the CI pipeline to parse.
-add_custom_target(coverage)
-add_custom_command(TARGET coverage
-    COMMAND genhtml ./coverage.info --output-directory ./
-                    --num-spaces 4 --demangle-cpp
     COMMAND lcov --list ./coverage.info
     WORKING_DIRECTORY ${COV_DIR}
 )
-add_dependencies(coverage lcov)
+add_dependencies(coverage ${BINARY})
 
 # Install coverage files to the 'coverage/' output directory.
 install(DIRECTORY ${COV_DIR}/ DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/${PROJ_COV_PATH})

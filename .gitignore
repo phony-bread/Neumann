@@ -3,6 +3,8 @@ bin
 lib
 dep
 deps
+doc
+docs
 cov
 coverage
 bld

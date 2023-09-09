@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-TEST(GenerateMessage, CorrectMessage)
+TEST(ExpectCorrect, Succeed)
 {
-    EXPECT_EQ(0, 0);
+    EXPECT_EQ(true, true);
 }
