@@ -54,13 +54,13 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: test
-        path: test/bin/results.xml
+        path: test/results.xml
 
     - name: upload-coverage
       uses: zgosalvez/github-actions-report-lcov@v3
       continue-on-error: true
       with:
-        coverage-files: ./coverage/coverage.info
+        coverage-files: coverage/coverage.info
         minimum-coverage: 85
         artifact-name: coverage
         github-token: ${{ secrets.GITHUB_TOKEN }}
