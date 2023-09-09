@@ -1,4 +1,4 @@
-name: CI
+name: CI Build
 
 on:
   push:
@@ -26,9 +26,17 @@ jobs:
       run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
     - name: test
-      working-directory: ${{github.workspace}}/test/bin
-      run: ./Neumann-Test --gtest_output=xml:results.xml
+      working-directory: ${{github.workspace}}/test/
+      run: ./bin/Neumann-Test --gtest_output=xml:results.xml
 
+    - name: coverage
+      run: cmake --build build --target coverage
+
+    - name: docs
+      uses: mattnotmitt/doxygen-action@1.9.5
+      with:
+        enable-latex: false
+        
     - name: upload-library
       uses: actions/upload-artifact@v3
       with:
@@ -47,4 +55,18 @@ jobs:
         name: test
         path: test/bin/results.xml
 
-    
+    - name: upload-coverage
+      uses: zgosalvez/github-actions-report-lcov@v3
+      with:
+        coverage-files: ./coverage/coverage.info
+        minimum-coverage: 85
+        artifact-name: coverage
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ${{github.workspace}}/test/
+        update-comment: true
+
+    - name: upload-docs
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: docs/*
