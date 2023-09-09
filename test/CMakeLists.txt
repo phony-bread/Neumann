@@ -29,16 +29,9 @@ ExternalProject_Add(${GTEST}
 include_directories(${GTEST_DIR}/${GTEST}/include)
 link_directories(${GTEST_DIR}/lib)
 
-# Setup options for Google Test.
-#option(BUILD_GMOCK   "" OFF)
-#option(INSTALL_GTEST "" OFF)
-
-# Import Google Test.
-#add_subdirectory("/usr/src/googletest" ${CMAKE_BINARY_DIR}/gtest)
-#include_directories(${GTEST_INCLUDE_DIRS})
-
 # Select the source & header files for compilation.
-file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
+file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false
+    ${PROJ_SRC_PATH}/*.h ${PROJ_SRC_PATH}/*.cpp)
 set(SOURCES ${TEST_SOURCES})
 
 # Create our test executable.
@@ -57,8 +50,9 @@ target_link_libraries(${BINARY} PUBLIC gtest -fprofile-arcs)
 
 # Install the generated test executable to the 'bin'
 # subdirectory of the install path.
-install(TARGETS ${BINARY} DESTINATION ${PROJ_BIN_PATH})
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake DESTINATION ${PROJ_BIN_PATH})
+install(TARGETS ${BINARY} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/${PROJ_BIN_PATH})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake
+    DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/${PROJ_BIN_PATH})
 
 # Setup directories for coverage.
 set(OBJ_DIR ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${BINARY}.dir)
@@ -73,7 +67,7 @@ add_custom_target(gcov
 add_custom_command(TARGET gcov
     COMMAND gcov -b ${CMAKE_SOURCE_DIR}/${PROJ_SRC_PATH}/*.cpp
                  -s ${CMAKE_SOURCE_DIR}/${PROJ_SRC_PATH} -k -q
-                 -o ${OBJ_DIR}/__/${PROJ_SRC_PATH} -m -f -j
+                 -o ${OBJ_DIR}/${PROJ_SRC_PATH} -m -f -j
     WORKING_DIRECTORY ${COV_DIR}
 )
 add_dependencies(gcov ${BINARY})
@@ -111,4 +105,4 @@ add_custom_command(TARGET coverage
 add_dependencies(coverage lcov)
 
 # Install coverage files to the 'coverage/' output directory.
-install(DIRECTORY ${COV_DIR}/ DESTINATION ${PROJ_COV_PATH})
+install(DIRECTORY ${COV_DIR}/ DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/${PROJ_COV_PATH})
