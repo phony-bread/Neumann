@@ -18,7 +18,7 @@ jobs:
     - uses: hrishikesh-kadam/setup-lcov@v1.0.0
 
     - name: configure
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} --fresh
 
     - name: build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
@@ -57,8 +57,19 @@ jobs:
         path: test/results.xml
 
     - name: upload-coverage
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage
+        path: test/coverage/*
+
+    - name: upload-docs
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: docs/*
+
+    - name: report-coverage
       uses: zgosalvez/github-actions-report-lcov@v3
-      continue-on-error: true
       with:
         coverage-files: coverage/coverage.info
         minimum-coverage: 85
@@ -66,9 +77,3 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{github.workspace}}/test/
         update-comment: true
-
-    - name: upload-docs
-      uses: actions/upload-artifact@v3
-      with:
-        name: documentation
-        path: docs/*
