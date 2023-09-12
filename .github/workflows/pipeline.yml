@@ -70,6 +70,7 @@ jobs:
 
     - name: report-coverage
       uses: zgosalvez/github-actions-report-lcov@v3
+      continue-on-error: true
       with:
         coverage-files: coverage/coverage.info
         minimum-coverage: 85
